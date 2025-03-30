@@ -2,26 +2,14 @@ import streamlit as st
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
-from sklearn.svm import SVC
-from sklearn.metrics import precision_score, recall_score
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import ConfusionMatrixDisplay as plot_confusion_matrix
 
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
+st.title("Binary Classification WebApp")    
+st.markdown("Are your mushrooms edible or poisonous? 🍄")
 
-from sklearn.metrics import RocCurveDisplay as plot_roc_curve
-from sklearn.metrics import PrecisionRecallDisplay as plot_precision_recall_curve
+st.sidebar.title("Binary Classification")
+st.sidebar.markdown("Are your mushrooms edible or poisonous?")
 
-
-def main():
-    st.title("Binary Classification WebApp")    
-    st.markdown("Are your mushroom edible or poisonous? 🍄")
-
-    st.sidebar.title("Binary Classification")
-    st.sidebar.markdown("Are your mushroom edible or poisonous?")
-
-   @st.cache_data
+@st.cache_data
 def load_data():
     data = pd.read_csv('mushrooms.csv')
     label = LabelEncoder()
@@ -36,6 +24,8 @@ def split(df):
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=0)
     return x_train, x_test, y_train, y_test
 
+df = load_data()
+x_train, x_test, y_train, y_test = split(df)
     
     def plot_metrics(metrics_list, y_pred):
         if 'Confusion Matrix' in metrics_list:
