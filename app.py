@@ -21,23 +21,21 @@ def main():
     st.sidebar.title("Binary Classification")
     st.sidebar.markdown("Are your mushroom edible or poisonous?")
 
-    @st.cache(persist = True)
-    def load_data():
-        data = pd.read_csv('mushrooms.csv')
-        label = LabelEncoder()
+   @st.cache_data
+def load_data():
+    data = pd.read_csv('mushrooms.csv')
+    label = LabelEncoder()
+    for col in data.columns:
+        data[col] = label.fit_transform(data[col])
+    return data
 
-        for col in data.columns:
-            data[col] = label.fit_transform(data[col])
-        
-        return data
+@st.cache_data
+def split(df):
+    y = df.type
+    x = df.drop(columns=['type'])
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=0)
+    return x_train, x_test, y_train, y_test
 
-    @st.cache(persist = True)
-    def split(df):
-        y = df.type
-        x = df.drop(columns = ['type'])
-        x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3, random_state = 0)
-
-        return x_train, x_test, y_train, y_test
     
     def plot_metrics(metrics_list, y_pred):
         if 'Confusion Matrix' in metrics_list:
